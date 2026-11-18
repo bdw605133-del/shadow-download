@@ -7,6 +7,8 @@ storage/releases/*
 storage/staging/*
 dist/
 site/
+netlify_site/
+netlify_site.zip
 tools/installer_stub/*.obj
 tools/installer_stub/*.pdb
 !storage/releases/.gitkeep

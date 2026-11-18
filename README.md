@@ -80,7 +80,7 @@ The link stays available at <http://127.0.0.1:8000> for as long as that Windows 
 
 ### Free public website (works with this PC off)
 
-A fully free, always-on public HTTPS deployment is available as a **static download site**: GitHub Pages + GitHub Releases. It uses no API keys, no admin database and no local server. See `docs/GITHUB_PAGES.md` for the one-time setup and verification steps. It does not provide browser chat to the native SHADOW backend; see that document for the exact compatibility status.
+A fully free, always-on public HTTPS deployment is available as a **static download site**: GitHub Pages + GitHub Releases. It uses no API keys, no admin database and no local server. See `docs/GITHUB_PAGES.md` for the one-time setup and verification steps. For the fastest preview, `tools/build_netlify_site.py` creates `netlify_site/`, a pure HTML/CSS/JS folder for Netlify Drop; see `docs/NETLIFY_DROP.md`. Neither option provides browser chat to the native SHADOW backend; see those documents for the exact compatibility status.
 
 ### Configuration
 
