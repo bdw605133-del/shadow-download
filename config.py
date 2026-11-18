@@ -108,6 +108,9 @@ class BaseConfig:
     STATIC_EXPORT = _bool("SHADOW_STATIC_EXPORT", False)
     STATIC_RELEASE_URL_TEMPLATE = os.getenv("SHADOW_STATIC_RELEASE_URL_TEMPLATE", "").strip()
 
+    # Google Search Console ownership token (value only, not the full tag).
+    GOOGLE_SITE_VERIFICATION = os.getenv("SHADOW_GOOGLE_VERIFICATION", "").strip()
+
     LOGIN_MAX_ATTEMPTS = _int("SHADOW_LOGIN_MAX_ATTEMPTS", 10)
     LOGIN_WINDOW_MINUTES = _int("SHADOW_LOGIN_WINDOW_MINUTES", 15)
 

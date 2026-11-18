@@ -171,6 +171,14 @@ def main() -> int:
         shutil.copytree(ROOT / "app" / "static", static_target)
         if SCREENSHOT_SOURCE.is_dir():
             shutil.copytree(SCREENSHOT_SOURCE, static_target / "screenshots", dirs_exist_ok=True)
+
+        # Search Console HTML-file verification files, if any.
+        verification_source = ROOT / "verification"
+        if verification_source.is_dir():
+            for item in verification_source.iterdir():
+                if item.is_file():
+                    shutil.copy2(item, SITE_DIR / item.name)
+
         (SITE_DIR / ".nojekyll").write_text("", encoding="utf-8")
 
     print(f"Static site written to {SITE_DIR.relative_to(ROOT)}")

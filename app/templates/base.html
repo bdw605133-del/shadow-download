@@ -23,6 +23,7 @@
   <title>{{ page_title }} | {{ site.name }}</title>
   <meta name="description" content="{{ page_description }}">
   <meta name="robots" content="index, follow">
+  {% if config.GOOGLE_SITE_VERIFICATION %}<meta name="google-site-verification" content="{{ config.GOOGLE_SITE_VERIFICATION }}">{% endif %}
   <link rel="canonical" href="{{ site.base_url }}{{ request.path }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ site.name }}">
