@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<div class="container admin-layout">
+  {% include 'admin/_sidebar.html' %}
+  <div>
+    <div class="admin-head">
+      <div><span class="eyebrow">Homepage</span><h1>Manage site content</h1><p class="muted">Changes appear across every public page after saving.</p></div>
+    </div>
+    <form method="post" class="card">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="form-section">
+        <h2>Hero text</h2>
+        <div class="form-grid">
+          <div class="field field--full"><label for="hero_headline">Headline</label><input id="hero_headline" name="hero_headline" value="{{ values.hero_headline }}" maxlength="200" required></div>
+          <div class="field field--full"><label for="hero_description">Description</label><textarea id="hero_description" name="hero_description" class="small" required>{{ values.hero_description }}</textarea></div>
+          <div class="field field--full"><label for="app_description">Short application description</label><textarea id="app_description" name="app_description" class="small">{{ values.app_description }}</textarea></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h2>Official links</h2>
+        <div class="form-grid">
+          <div class="field"><label for="support_url">Support URL</label><input id="support_url" name="support_url" type="url" value="{{ values.support_url }}"></div>
+          <div class="field"><label for="source_url">Source URL</label><input id="source_url" name="source_url" type="url" value="{{ values.source_url }}"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h2>Structured content</h2>
+        <p class="muted">Each field must be a JSON list. Only features marked <code>"verified": true</code> are displayed publicly.</p>
+        <div class="field field--full"><label for="features">Features</label><textarea id="features" name="features">{{ json_text.features }}</textarea></div>
+        <div class="field field--full section-cta"><label for="system_requirements">System requirements</label><textarea id="system_requirements" name="system_requirements" class="small">{{ json_text.system_requirements }}</textarea></div>
+        <div class="field field--full section-cta"><label for="install_steps">Installation steps</label><textarea id="install_steps" name="install_steps" class="small">{{ json_text.install_steps }}</textarea></div>
+        <div class="field field--full section-cta"><label for="faq">Frequently asked questions</label><textarea id="faq" name="faq" class="small">{{ json_text.faq }}</textarea></div>
+      </div>
+      <div class="form-actions"><button class="btn btn--primary" type="submit">Save content</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

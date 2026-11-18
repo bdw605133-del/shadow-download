@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<div class="container admin-layout">
+  {% include 'admin/_sidebar.html' %}
+  <div>
+    <div class="admin-head">
+      <div><span class="eyebrow">Control panel</span><h1>Release dashboard</h1><p class="muted">Signed in as {{ g.admin_session.display_name }}</p></div>
+      <a class="btn btn--primary" href="{{ url_for('admin.new_release') }}">Publish a new version</a>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><strong>{{ stats.total }}</strong><span>Total releases</span></div>
+      <div class="stat"><strong>{{ stats.published }}</strong><span>Published</span></div>
+      <div class="stat"><strong>{{ stats.verified }}</strong><span>Verified</span></div>
+      <div class="stat"><strong>{{ stats.downloads }}</strong><span>Downloads</span></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Version</th><th>Date</th><th>Status</th><th>Checksum</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for release in releases %}
+          <tr>
+            <td><strong>{{ release.version }}</strong><br><small class="muted">{{ release.title }}</small></td>
+            <td>{{ release.release_date }}</td>
+            <td>{{ ui.status_badge(release) }}</td>
+            <td><code class="muted">{{ release.sha256[:12] ~ '…' if release.sha256 else '—' }}</code></td>
+            <td>
+              <div class="admin-actions">
+                <a class="btn btn--small btn--ghost" href="{{ url_for('admin.edit_release', release_id=release.id) }}">Edit</a>
+                <form method="post" action="{{ url_for('admin.verify', release_id=release.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button class="btn btn--small btn--ghost" type="submit">Verify</button>
+                </form>
+                {% if release.published %}
+                  <form method="post" action="{{ url_for('admin.unpublish', release_id=release.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn btn--small btn--ghost" type="submit">Unpublish</button>
+                  </form>
+                {% elif release.verified %}
+                  <form method="post" action="{{ url_for('admin.publish', release_id=release.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <button class="btn btn--small btn--primary" type="submit">Publish</button>
+                  </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="muted">No releases yet. Create the first release after packaging and verifying the installer.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card section-cta">
+      <h2>Recent activity</h2>
+      <div class="log-list">
+        {% for row in recent %}
+        <div class="log-row"><time>{{ row.created_at }}</time><span><strong>{{ row.action }}</strong> · {{ row.target }} {% if row.detail %}— {{ row.detail }}{% endif %}</span></div>
+        {% else %}<p class="muted">No activity recorded.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

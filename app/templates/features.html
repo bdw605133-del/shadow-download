@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Application capabilities</span>
+    <h1>What SHADOW MODEL can do</h1>
+    <p>These features are implemented in the SHADOW MODEL desktop application and verified against the release source tree. Where a capability has a boundary, we state it plainly.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid--2">
+      {% for feature in site.features if feature.verified %}
+      <article class="card feature-card reveal">
+        <div class="icon-wrap">{{ ui.icon(feature.icon) }}</div>
+        <h2>{{ feature.title }}</h2>
+        <p>{{ feature.description }}</p>
+        {% if feature.note %}<p class="feature-note">{{ feature.note }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Verified architecture</span>
+      <h2>Built for local use</h2>
+      <p>The application links Qt 6 (Core, Gui, Widgets, Network, Multimedia, Concurrent) and bundles the required runtimes and engines in the official installer.</p>
+    </div>
+    <div class="grid grid--3">
+      <div class="card reveal"><h3>Native desktop</h3><p class="muted">C++17 and Qt 6 x64. No browser tab is needed for local features.</p></div>
+      <div class="card reveal"><h3>Local engines</h3><p class="muted">llama.cpp and whisper.cpp binaries are bundled with the portable build.</p></div>
+      <div class="card reveal"><h3>Private by default</h3><p class="muted">Cloud providers are opt-in and require your own configuration. Keys are protected by Windows DPAPI.</p></div>
+    </div>
+    <div class="section-cta"><a class="btn btn--primary" href="{{ url_for('download') }}">Download verified build</a></div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="section">
+  <div class="container empty-state">
+    <div class="icon-wrap">{{ ui.icon('shield') }}</div>
+    <h1>403 — Access denied</h1>
+    <p>You do not have permission to view this area.</p>
+    <a class="btn btn--primary" href="{{ url_for('home') }}">Return home</a>
+  </div>
+</section>
+{% endblock %}

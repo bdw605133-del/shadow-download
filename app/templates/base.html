@@ -1,0 +1,111 @@
+{% import '_macros.html' as ui %}
+{% set page_title = page_title|default(site.name) %}
+{% set page_description = page_description|default('Official download site for the SHADOW MODEL Windows desktop application.') %}
+{% set active = active|default('') %}
+{% set ld = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  'name': site.product,
+  'applicationCategory': 'DesktopApplication',
+  'operatingSystem': 'Windows 10 64-bit, Windows 11',
+  'url': site.base_url,
+  'description': page_description
+} %}
+{% if latest and latest.published %}
+  {% set _ = ld.update({'softwareVersion': latest.version, 'datePublished': latest.release_date}) %}
+{% endif %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070506">
+  <title>{{ page_title }} | {{ site.name }}</title>
+  <meta name="description" content="{{ page_description }}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{ site.base_url }}{{ request.path }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  <meta property="og:url" content="{{ site.base_url }}{{ request.path }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="application/ld+json">{{ ld|tojson }}</script>
+  {% block head %}{% endblock %}
+</head>
+<body class="page-{{ active or 'base' }}">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="ambient" aria-hidden="true"><span></span><span></span></div>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('home') }}" aria-label="SHADOW DOWNLOAD home">
+        {{ ui.logo() }}
+        <span class="brand-text"><strong>SHADOW</strong><small>DOWNLOAD</small></span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
+        <span></span><span></span><span></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+        {% for endpoint, (label, _path) in site.pages.items() %}
+          <a href="{{ url_for(endpoint) }}" {% if active == endpoint %}aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+        {% if not config.STATIC_EXPORT %}<a class="nav-admin" href="{{ url_for('admin.dashboard') }}" rel="nofollow">Admin</a>{% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container flash-stack" role="status">
+        {% for category, message in messages %}
+          <div class="flash flash--{{ category }}">{{ ui.icon('alert' if category in ('error', 'warning') else 'check') }}<span>{{ message }}</span></div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        {{ ui.logo('small') }}
+        <p><strong>SHADOW DOWNLOAD</strong></p>
+        <p class="muted">The official distribution website for the SHADOW MODEL Windows application. Unofficial mirrors are not supported.</p>
+      </div>
+      <div>
+        <h2>Website</h2>
+        <ul class="footer-links">
+          {% for endpoint, (label, _path) in site.pages.items() %}
+            <li><a href="{{ url_for(endpoint) }}">{{ label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h2>Official</h2>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('download') }}">Latest release</a></li>
+          <li><a href="{{ url_for('release_notes') }}">Release notes</a></li>
+          <li><a href="{{ url_for('installation') }}">Verify checksum</a></li>
+          {% if site.support_url %}<li><a href="{{ site.support_url }}" rel="noopener noreferrer">Support</a></li>{% endif %}
+          {% if site.source_url %}<li><a href="{{ site.source_url }}" rel="noopener noreferrer">Source</a></li>{% endif %}
+          {% if not config.STATIC_EXPORT %}<li><a href="{{ url_for('admin.login') }}" rel="nofollow">Administrator</a></li>{% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>&copy; {{ current_year }} SHADOW. All rights reserved.</span>
+      <span>Built for Windows · Verified releases only</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

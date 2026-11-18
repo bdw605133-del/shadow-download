@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Official distribution</span>
+    <h1>Download SHADOW MODEL</h1>
+    <p>Every file on this page is a verified release: the installer exists, its checksum matches, and its required application files were checked before publication.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    {% if latest %}
+    <article class="card release-card release-card--latest reveal">
+      <div class="release-topline">
+        <div>
+          <span class="eyebrow">Latest stable release</span>
+          <span class="release-version">{{ latest.version }}</span>
+        </div>
+        <span class="badge badge--live">Verified · Published</span>
+      </div>
+      <h2>{{ latest.title }}</h2>
+      <p class="muted">{{ release_notes_lines(latest.notes)[0] if release_notes_lines(latest.notes) else site.app_description }}</p>
+
+      <dl class="release-facts">
+        <div><dt>Installer</dt><dd>{{ latest.installer_name }}</dd></div>
+        <div><dt>File size</dt><dd>{{ latest.file_size|filesize }}</dd></div>
+        <div><dt>Release date</dt><dd>{{ latest.release_date|releasedate }}</dd></div>
+        <div><dt>Architecture</dt><dd>{{ latest.architecture|upper }}</dd></div>
+        <div><dt>Supported Windows</dt><dd>{{ latest.min_windows }}{% if latest.max_windows %} – {{ latest.max_windows }}{% endif %}</dd></div>
+        <div><dt>Channel</dt><dd>{{ latest.channel|capitalize }}</dd></div>
+      </dl>
+
+      <div class="checksum-box">
+        <div><strong class="muted">SHA-256</strong><br><code id="latest-checksum">{{ latest.sha256 }}</code></div>
+        <button class="copy-btn" type="button" data-copy="latest-checksum">Copy</button>
+      </div>
+
+      <div class="form-actions">
+        <a class="btn btn--primary" href="{{ installer_url(latest) }}">{{ ui.icon('download') }} Download Windows installer</a>
+        <a class="btn btn--ghost" href="{{ url_for('installation') }}">Installation &amp; verification guide</a>
+      </div>
+
+      <hr class="divider">
+      <div class="grid grid--2">
+        <div>
+          <h3>Release notes</h3>
+          <ul>
+            {% for line in release_notes_lines(latest.notes) %}<li>{{ line }}</li>{% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3>System requirements</h3>
+          {% for req in site.system_requirements %}
+          <p class="muted"><strong class="text-red">{{ req.label }}:</strong> {{ req.value }}</p>
+          {% endfor %}
+          {% if latest.requirements %}<p class="muted">{{ latest.requirements }}</p>{% endif %}
+        </div>
+      </div>
+    </article>
+    {% else %}
+    <div class="empty-state reveal">
+      <div class="icon-wrap">{{ ui.icon('shield') }}</div>
+      <h2>No verified release is available yet</h2>
+      <p>The official installer has not passed release verification, so there is nothing to download here. No placeholder or test file is presented as a release. Check this page after the next official publication.</p>
+      <a class="btn btn--ghost" href="{{ url_for('release_notes') }}">View release notes</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if releases|length > 1 %}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head reveal"><span class="eyebrow">History</span><h2>Previous releases</h2></div>
+    <div class="release-list">
+      {% for release in releases if release.id != latest.id %}
+      <div class="release-row reveal">
+        <div>
+          <strong>{{ release.version }}</strong>
+          <small> · {{ release.channel|capitalize }} · {{ release.release_date|releasedate }} · {{ release.file_size|filesize }}</small>
+          <div><code class="muted">{{ release.sha256[:24] }}…</code></div>
+        </div>
+        <div class="admin-actions">
+          <a class="btn btn--small btn--ghost" href="{{ url_for('release_notes') }}">Notes</a>
+          <a class="btn btn--small btn--primary" href="{{ installer_url(release) }}">{{ ui.icon('download') }} Download</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="card reveal">
+      <h2>Installation instructions</h2>
+      <div class="steps">
+        {% for step in site.install_steps %}
+        <div class="step"><div><h3>Step {{ loop.index }}</h3><p>{{ step }}</p></div></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

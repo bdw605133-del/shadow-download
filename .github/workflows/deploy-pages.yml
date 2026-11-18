@@ -1,0 +1,75 @@
+name: Deploy SHADOW DOWNLOAD to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: shadow-download-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Compute public URLs
+        id: urls
+        shell: bash
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+          if [ "$REPO" = "$OWNER.github.io" ]; then
+            BASE="https://$OWNER.github.io/"
+          else
+            BASE="https://$OWNER.github.io/$REPO/"
+          fi
+          RELEASE="https://github.com/$OWNER/$REPO/releases/download/v{version}/{filename}"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          echo "release=$RELEASE" >> "$GITHUB_OUTPUT"
+          echo "Public base: $BASE"
+
+      - name: Verify release asset exists
+        env:
+          RELEASE_URL: ${{ steps.urls.outputs.release }}
+        run: |
+          python -c "import json, os, urllib.request; d=json.load(open('public_static/data.json')); r=d['releases'][0]; url=os.environ['RELEASE_URL'].format(version=r['version'], filename=r['installer_name']); req=urllib.request.Request(url, headers={'Range':'bytes=0-0'}); response=urllib.request.urlopen(req, timeout=60); assert response.status in (200, 206); print('Release asset verified:', url)"
+
+      - name: Export static site
+        env:
+          SHADOW_PUBLIC_BASE_URL: ${{ steps.urls.outputs.base }}
+          SHADOW_STATIC_RELEASE_URL_TEMPLATE: ${{ steps.urls.outputs.release }}
+          SHADOW_SECRET_KEY: static-export-only-not-a-runtime-secret
+        run: python tools/export_static.py
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

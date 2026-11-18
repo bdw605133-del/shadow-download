@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<div class="container admin-layout">
+  {% include 'admin/_sidebar.html' %}
+  <div>
+    <div class="admin-head"><div><span class="eyebrow">Security</span><h1>Audit log</h1><p class="muted">Most recent 200 administrative actions.</p></div></div>
+    <div class="card">
+      <div class="log-list">
+        {% for row in rows %}
+        <div class="log-row"><time>{{ row.created_at }}</time><span><strong>{{ row.action }}</strong> · {{ row.target }}{% if row.detail %} — {{ row.detail }}{% endif %}</span></div>
+        {% else %}<p class="muted">No activity recorded.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

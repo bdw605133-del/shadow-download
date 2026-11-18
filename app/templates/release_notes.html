@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Version history</span>
+    <h1>Release notes</h1>
+    <p>Only verified, published releases are listed. Notes describe what is actually present in each distributed build.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if releases %}
+      {% for release in releases %}
+      <article class="card release-note-card reveal">
+        <div class="release-topline">
+          <div>
+            <span class="release-version">{{ release.version }}</span>
+            <span class="badge badge--live">{{ release.channel|upper }}</span>
+          </div>
+          <span class="muted">{{ release.release_date|releasedate }}</span>
+        </div>
+        <h2>{{ release.title }}</h2>
+        <ul>
+          {% for line in release_notes_lines(release.notes) %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+        <div class="checksum-box"><code>{{ release.sha256 }}</code></div>
+        <a class="btn btn--small btn--primary" href="{{ installer_url(release) }}">{{ ui.icon('download') }} Download this release</a>
+      </article>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state reveal">
+        <div class="icon-wrap">{{ ui.icon('document') }}</div>
+        <h2>No published release notes yet</h2>
+        <p>Release notes will appear here when an administrator publishes the first verified build.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

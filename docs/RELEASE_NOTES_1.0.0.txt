@@ -1,0 +1,10 @@
+Initial verified public release of the SHADOW MODEL Windows desktop application.
+
+Native SHADOW MODEL is available as a first-class, independently trained model with its own byte-level BPE tokenizer, decoder-only Transformer, checkpoint system and streaming CPU inference.
+AI chat workspace with streaming replies, Markdown/code rendering, file attachments and persistent conversation history.
+Voice assistant with whisper.cpp speech-to-text, wake-word detection and Windows SAPI narration.
+Image attachments with vision-capable provider support and OCR text extraction for local models.
+Document reading for PDF, DOCX, XLSX, TXT, CSV and JSON attachments.
+Arabic and English interface with UTF-8-safe tokenisation.
+Bundled Qt 6, Visual C++ x64 runtime, llama.cpp and whisper.cpp engines, plus the licensed Qwen2.5 1.5B Q4_K_M and Whisper Base models.
+Application smoke test passed against the packaged build before release.

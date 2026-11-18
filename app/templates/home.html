@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <span class="eyebrow">Official Windows desktop release</span>
+      <h1>{% if 'SHADOW MODEL' in site.hero_headline %}{% set parts = site.hero_headline.split('SHADOW MODEL', 1) %}{{ parts[0] }}<span class="accent">SHADOW MODEL</span>{{ parts[1] }}{% else %}{{ site.hero_headline }}{% endif %}</h1>
+      <p class="lead">{{ site.hero_description }}</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="{{ installer_url(latest) if latest else url_for('download') }}">
+          {{ ui.icon('download') }} {{ 'Download latest release' if latest else 'View release status' }}
+        </a>
+        <a class="btn btn--ghost" href="{{ url_for('features') }}">Explore features</a>
+      </div>
+      <dl class="hero-meta">
+        <div><dt>Latest version</dt><dd>{{ latest.version if latest else 'Not published yet' }}</dd></div>
+        <div><dt>Released</dt><dd>{{ latest.release_date|releasedate if latest else '—' }}</dd></div>
+        <div><dt>Platform</dt><dd>Windows 10 / 11 · x64</dd></div>
+      </dl>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-glow" aria-hidden="true"></div>
+      {% set hero_shots = screenshots_for(latest.id) if latest else [] %}
+      <div class="hero-frame">
+        <img src="{{ url_for('static', filename='img/screenshots/agents_after.png') }}" alt="SHADOW MODEL agents page in the final release interface" width="1000" height="600">
+      </div>
+      {% if hero_shots %}<span class="visual-caption">Application screenshot · verified build</span>{% else %}<span class="visual-caption">Application interface</span>{% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">What is inside</span>
+      <h2>Capabilities you can actually use</h2>
+      <p>Every capability below is implemented in the desktop application and verified against the release source. Limitations are stated rather than hidden.</p>
+    </div>
+    <div class="grid grid--4">
+      {% for feature in site.features if feature.verified %}
+      <article class="card feature-card reveal">
+        <div class="icon-wrap">{{ ui.icon(feature.icon) }}</div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+        {% if feature.note %}<p class="feature-note">{{ feature.note }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Look closer</span>
+      <h2>Application screenshots</h2>
+      <p>Captures from the verified SHADOW MODEL interface. Screenshots are attached to published releases by the release administrator.</p>
+    </div>
+    {% set shots = screenshots_for(latest.id) if latest else [] %}
+    {% if shots %}
+      <div class="screenshot-grid">
+        {% for shot in shots[:4] %}
+        <figure class="reveal">
+          <div class="screenshot"><img src="{{ screenshot_url(shot) }}" alt="{{ shot.alt_text }}" loading="lazy"></div>
+          <figcaption>{{ shot.alt_text }}</figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state reveal">
+        <div class="icon-wrap">{{ ui.icon('image') }}</div>
+        <h3>Screenshots will appear with the first verified release</h3>
+        <p>We publish interface captures only after they have been checked against the exact build being distributed. No mock-ups are presented as screenshots.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Release status</span>
+      <h2>{{ 'Ready to download' if latest else 'No release published yet' }}</h2>
+      <p>Only builds that pass file, checksum and payload verification can appear here.</p>
+    </div>
+    {% if latest %}
+      <div class="card release-card release-card--latest reveal">
+        <div class="release-topline">
+          <span class="release-version">{{ latest.version }}</span>
+          <span class="badge badge--live">{{ latest.channel|upper }} · Published</span>
+        </div>
+        <p class="muted">{{ release_notes_lines(latest.notes)[0] if release_notes_lines(latest.notes) else site.app_description }}</p>
+        <dl class="release-facts">
+          <div><dt>File size</dt><dd>{{ latest.file_size|filesize }}</dd></div>
+          <div><dt>Release date</dt><dd>{{ latest.release_date|releasedate }}</dd></div>
+          <div><dt>Architecture</dt><dd>{{ latest.architecture|upper }}</dd></div>
+          <div><dt>SHA-256</dt><dd>{{ latest.sha256[:16] }}…</dd></div>
+        </dl>
+        <a class="btn btn--primary" href="{{ installer_url(latest) }}">{{ ui.icon('download') }} Download installer</a>
+        <a class="btn btn--ghost" href="{{ url_for('download') }}">Release details</a>
+      </div>
+    {% else %}
+      <div class="empty-state reveal">
+        <div class="icon-wrap">{{ ui.icon('shield') }}</div>
+        <h3>Verification comes before publication</h3>
+        <p>The official installer has not been published through this site yet. When it is, the version, checksum, size and release notes will be shown here. Do not download SHADOW MODEL installers from unofficial sources.</p>
+        <a class="btn btn--ghost" href="{{ url_for('download') }}">Open download page</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="section-head reveal"><span class="eyebrow">Getting started</span><h2>Install in a few steps</h2></div>
+    <div class="steps">
+      {% for step in site.install_steps[:3] %}
+      <div class="step reveal"><div><h3>Step {{ loop.index }}</h3><p>{{ step }}</p></div></div>
+      {% endfor %}
+    </div>
+    <div class="section-cta"><a class="btn btn--ghost" href="{{ url_for('installation') }}">Read the full installation guide</a></div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head reveal"><span class="eyebrow">Questions</span><h2>Frequently asked questions</h2></div>
+    <div class="card reveal">
+      {% for item in site.faq[:4] %}
+      <details class="faq-item"><summary>{{ item.q }}</summary><p>{{ item.a }}</p></details>
+      {% endfor %}
+    </div>
+    <div class="section-cta"><a class="btn btn--ghost" href="{{ url_for('faq') }}">All questions</a></div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Before you install</span>
+    <h1>System requirements</h1>
+    <p>SHADOW MODEL is a 64-bit Windows desktop application. The official installer bundles Qt and Visual C++ runtimes, so no separate developer runtime installation is needed.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Component</th><th>Requirement</th></tr></thead>
+        <tbody>
+          {% for req in site.system_requirements %}<tr><td><strong>{{ req.label }}</strong></td><td>{{ req.value }}</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if latest %}
+      <div class="card reveal section-cta">
+        <h2>Release-specific requirements</h2>
+        <p><strong class="text-red">{{ latest.version }}:</strong> {{ latest.min_windows }}{% if latest.max_windows %} through {{ latest.max_windows }}{% endif %}, {{ latest.architecture|upper }}.</p>
+        {% if latest.requirements %}<p class="muted">{{ latest.requirements }}</p>{% endif %}
+      </div>
+    {% endif %}
+    <div class="card reveal section-cta">
+      <h2>Good to know</h2>
+      <ul class="muted">
+        <li>Local inference runs on the CPU; a discrete GPU is not required.</li>
+        <li>Large language models need free RAM. 16 GB is recommended for comfortable use.</li>
+        <li>Arabic narration requires an Arabic SAPI voice installed in Windows.</li>
+        <li>Bundled model files are licensed separately. See the notices included with the release.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+{% endblock %}

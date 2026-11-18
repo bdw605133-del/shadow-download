@@ -1,0 +1,7 @@
+Windows 10 64-bit (version 1903 or newer) or Windows 11.
+4 CPU cores (tested target: Intel Core i5-2500).
+8 GB free RAM; 16 GB recommended for larger models.
+About 1.5 GB free disk space for the installed application, engines and bundled models.
+No GPU required; inference and training run on the CPU.
+The Qt 6 and Visual C++ 2015-2022 x64 runtimes are bundled in the installer.
+Arabic narration requires an Arabic SAPI voice installed in Windows.

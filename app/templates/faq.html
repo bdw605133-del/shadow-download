@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Support</span>
+    <h1>Frequently asked questions</h1>
+    <p>Answers about the official download, release verification and the capabilities of the SHADOW MODEL desktop application.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="card reveal">
+      {% for item in site.faq %}
+      <details class="faq-item" {% if loop.first %}open{% endif %}><summary>{{ item.q }}</summary><p>{{ item.a }}</p></details>
+      {% endfor %}
+    </div>
+    <div class="card reveal section-cta">
+      <h2>Still need help?</h2>
+      <p class="muted">Use the official support link below and include your Windows version, the release version and the SHA-256 of the installer you downloaded.</p>
+      {% if site.support_url %}<a class="btn btn--primary" href="{{ site.support_url }}" rel="noopener noreferrer">Contact support</a>{% else %}<p class="muted">A support link has not been configured yet.</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

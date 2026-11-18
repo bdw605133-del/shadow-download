@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="section">
+  <div class="container empty-state">
+    <div class="icon-wrap">{{ ui.icon('alert') }}</div>
+    <h1>Too many attempts</h1>
+    <p>Sign-in has been temporarily limited. Try again in {{ retry_seconds }} minutes.</p>
+    <a class="btn btn--primary" href="{{ url_for('admin.login') }}">Back to sign in</a>
+  </div>
+</section>
+{% endblock %}

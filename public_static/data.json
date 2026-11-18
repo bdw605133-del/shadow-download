@@ -1,0 +1,187 @@
+{
+  "releases": [
+    {
+      "id": 1,
+      "version": "1.0.0",
+      "title": "SHADOW MODEL 1.0.0 — first verified release",
+      "channel": "stable",
+      "release_date": "2026-11-18",
+      "notes": "Initial verified public release of the SHADOW MODEL Windows desktop application.\n\nNative SHADOW MODEL is available as a first-class, independently trained model with its own byte-level BPE tokenizer, decoder-only Transformer, checkpoint system and streaming CPU inference.\nAI chat workspace with streaming replies, Markdown/code rendering, file attachments and persistent conversation history.\nVoice assistant with whisper.cpp speech-to-text, wake-word detection and Windows SAPI narration.\nImage attachments with vision-capable provider support and OCR text extraction for local models.\nDocument reading for PDF, DOCX, XLSX, TXT, CSV and JSON attachments.\nArabic and English interface with UTF-8-safe tokenisation.\nBundled Qt 6, Visual C++ x64 runtime, llama.cpp and whisper.cpp engines, plus the licensed Qwen2.5 1.5B Q4_K_M and Whisper Base models.\nApplication smoke test passed against the packaged build before release.\n",
+      "installer_name": "SHADOW-MODEL-1.0.0-setup.exe",
+      "installer_path": "1.0.0/SHADOW-MODEL-1.0.0-setup.exe",
+      "file_size": 1412554704,
+      "sha256": "3bb744cfc64f066ccbd9129e2805b85a25a09ba8d1606353412b9dc13c53236d",
+      "min_windows": "Windows 10 64-bit (1903+) or Windows 11",
+      "max_windows": "",
+      "architecture": "x64",
+      "requirements": "Windows 10 64-bit (version 1903 or newer) or Windows 11.\n4 CPU cores (tested target: Intel Core i5-2500).\n8 GB free RAM; 16 GB recommended for larger models.\nAbout 1.5 GB free disk space for the installed application, engines and bundled models.\nNo GPU required; inference and training run on the CPU.\nThe Qt 6 and Visual C++ 2015-2022 x64 runtimes are bundled in the installer.\nArabic narration requires an Arabic SAPI voice installed in Windows.\n",
+      "published": 1,
+      "verified": 1,
+      "verified_at": "2026-11-18 17:17:20",
+      "created_at": "2026-11-18 17:17:20",
+      "updated_at": "2026-11-18 17:17:20"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": 6,
+      "release_id": 1,
+      "file_path": "1.0.0/agents_after.png",
+      "mime_type": "image/png",
+      "alt_text": "SHADOW MODEL agents page — final release interface",
+      "sort_order": 0,
+      "uploaded_at": "2026-11-18 17:38:16"
+    },
+    {
+      "id": 7,
+      "release_id": 1,
+      "file_path": "1.0.0/settings_after.png",
+      "mime_type": "image/png",
+      "alt_text": "SHADOW MODEL settings page — final release interface",
+      "sort_order": 1,
+      "uploaded_at": "2026-11-18 17:38:16"
+    },
+    {
+      "id": 8,
+      "release_id": 1,
+      "file_path": "1.0.0/agents_after_en.png",
+      "mime_type": "image/png",
+      "alt_text": "SHADOW MODEL agents page — English interface",
+      "sort_order": 2,
+      "uploaded_at": "2026-11-18 17:38:16"
+    },
+    {
+      "id": 9,
+      "release_id": 1,
+      "file_path": "1.0.0/settings_after_en.png",
+      "mime_type": "image/png",
+      "alt_text": "SHADOW MODEL settings page — English interface",
+      "sort_order": 3,
+      "uploaded_at": "2026-11-18 17:38:16"
+    }
+  ],
+  "site_content": {
+    "hero_headline": "MEET SHADOW MODEL",
+    "hero_description": "SHADOW MODEL is a private, Windows desktop AI assistant built for chat, voice, images and documents — with Arabic and English support.",
+    "app_description": "A focused desktop experience that keeps your conversations, files and models close at hand. No browser tab required.",
+    "features": [
+      {
+        "icon": "chat",
+        "title": "AI Chat",
+        "description": "A native Qt chat workspace with streaming replies, Markdown and code rendering, file attachments and saved conversation history.",
+        "note": "",
+        "verified": true
+      },
+      {
+        "icon": "core",
+        "title": "Independent SHADOW Model",
+        "description": "A first-class, independently trained byte-level BPE Transformer with its own tokenizer, checkpoints, training controls and streaming CPU inference.",
+        "note": "Experimental and CPU-first. It is not equivalent to a large cloud model and must be trained before use.",
+        "verified": true
+      },
+      {
+        "icon": "voice",
+        "title": "Voice Assistant",
+        "description": "Microphone input with whisper.cpp transcription, wake-word detection and offline narration through Windows SAPI voices.",
+        "note": "Arabic narration requires an Arabic SAPI voice installed in Windows.",
+        "verified": true
+      },
+      {
+        "icon": "image",
+        "title": "Image Understanding",
+        "description": "Attach images to a conversation and query vision-capable providers, with OCR text extraction available to local models.",
+        "note": "Native SHADOW receives OCR text only. Scene understanding requires a configured vision-capable provider.",
+        "verified": true
+      },
+      {
+        "icon": "document",
+        "title": "Document Reading",
+        "description": "Read and query PDF, DOCX, XLSX, TXT, CSV and JSON attachments directly inside the chat workspace.",
+        "note": "PDF support covers selectable text; scanned PDFs need OCR. Office extraction is a minimal built-in reader.",
+        "verified": true
+      },
+      {
+        "icon": "memory",
+        "title": "Conversation Memory",
+        "description": "Persistent conversation history plus a separate conversation-memory store that keeps context across turns.",
+        "note": "Training data is never collected from conversations.",
+        "verified": true
+      },
+      {
+        "icon": "language",
+        "title": "Arabic and English",
+        "description": "A bilingual interface with Arabic and English themes, RTL support and lossless UTF-8 handling in the tokenizer.",
+        "note": "",
+        "verified": true
+      },
+      {
+        "icon": "desktop",
+        "title": "Windows Desktop Application",
+        "description": "A native C++17 / Qt 6 x64 application with bundled Qt and VC++ runtimes, local engines and an optional portable model set.",
+        "note": "No browser is required for local features.",
+        "verified": true
+      }
+    ],
+    "system_requirements": [
+      {
+        "label": "Operating system",
+        "value": "Windows 10 64-bit (version 1903+) or Windows 11"
+      },
+      {
+        "label": "Processor",
+        "value": "4 cores (tested target: Intel Core i5-2500)"
+      },
+      {
+        "label": "Memory",
+        "value": "8 GB free RAM (16 GB recommended)"
+      },
+      {
+        "label": "Graphics",
+        "value": "Not required; the CPU build runs on integrated graphics"
+      },
+      {
+        "label": "Disk space",
+        "value": "About 1.5 GB for the app, engines and both models"
+      },
+      {
+        "label": "Additional runtime",
+        "value": "Qt 6 and Visual C++ x64 runtimes are bundled in the official installer"
+      }
+    ],
+    "install_steps": [
+      "Download the installer for the latest verified release from the Download page.",
+      "Compare the downloaded file's SHA-256 with the checksum shown on the release card.",
+      "Run the installer and choose an installation folder, or use the portable folder if supplied.",
+      "Launch SHADOW MODEL from the Start Menu or from ShadowAI.exe.",
+      "Open Settings → Local AI and select the bundled models, or download models from the Settings page."
+    ],
+    "faq": [
+      {
+        "q": "Is this the official download site?",
+        "a": "Yes. SHADOW DOWNLOAD is the dedicated distribution site for the SHADOW MODEL Windows desktop application. It is separate from the AI chat website."
+      },
+      {
+        "q": "Is there a verified release available?",
+        "a": "Only releases that have been built, checksummed and verified are published here. If the Download page says no release is available, do not trust installers from other sources."
+      },
+      {
+        "q": "How do I verify the installer?",
+        "a": "Open PowerShell in the download folder and run: Get-FileHash .\\<installer-name> -Algorithm SHA256. Compare the result with the checksum published on the Download page."
+      },
+      {
+        "q": "Does SHADOW MODEL need an internet connection?",
+        "a": "Local chat, voice transcription, document reading and the native SHADOW model work offline. Cloud providers and model downloads require internet access and your own credentials."
+      },
+      {
+        "q": "Which Windows versions are supported?",
+        "a": "Windows 10 64-bit (1903+) and Windows 11. The supported range for each build is listed on its release card."
+      },
+      {
+        "q": "Where can I report a problem?",
+        "a": "Use the official support link in the footer. Include your Windows version, the release version and the SHA-256 of the file you downloaded."
+      }
+    ],
+    "support_url": "",
+    "source_url": ""
+  }
+}

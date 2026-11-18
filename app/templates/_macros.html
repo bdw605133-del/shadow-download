@@ -1,0 +1,57 @@
+{% macro logo(size='normal') -%}
+<span class="brand-mark brand-mark--{{ size }}" aria-hidden="true">
+  <svg viewBox="0 0 64 64" role="img" focusable="false">
+    <defs>
+      <linearGradient id="shadowGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ff3548"/>
+        <stop offset="100%" stop-color="#7a0713"/>
+      </linearGradient>
+    </defs>
+    <path d="M32 3 5 17v18c0 15 11.6 25.4 27 30 15.4-4.6 27-15 27-30V17L32 3Z" fill="url(#shadowGrad)" opacity=".16"/>
+    <path d="M32 8 11 19v15c0 12 9.3 20.7 21 24.8C43.7 54.7 53 46 53 34V19L32 8Z" fill="none" stroke="url(#shadowGrad)" stroke-width="2.5"/>
+    <path d="M22 23h15c6.2 0 10 3.4 10 8.8 0 5.5-4 9.2-10.4 9.2H27v6h-5V23Zm5 4.5v8.8h9.2c3.3 0 5.3-1.7 5.3-4.4 0-2.8-2-4.4-5.3-4.4H27Z" fill="url(#shadowGrad)"/>
+  </svg>
+</span>
+{%- endmacro %}
+
+{% macro icon(name) -%}
+<svg class="feature-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  {%- if name == 'chat' -%}
+  <path d="M4 5.5h16v11H9l-5 4v-15Z"/><path d="M8 9.5h8M8 13h5"/>
+  {%- elif name == 'core' -%}
+  <circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9 7 7m10 10 2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+  {%- elif name == 'voice' -%}
+  <rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/>
+  {%- elif name == 'image' -%}
+  <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 17 5-5 3.5 3.5L15 13l5 4"/>
+  {%- elif name == 'document' -%}
+  <path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v5h4M9.5 12h6M9.5 15.5h6"/>
+  {%- elif name == 'memory' -%}
+  <path d="M6 4h12v16H6V4Z"/><path d="M9 8h6M9 11h6M9 14h4M9 17h2"/>
+  {%- elif name == 'language' -%}
+  <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/>
+  {%- elif name == 'desktop' -%}
+  <rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4M6.5 8.5h6"/>
+  {%- elif name == 'shield' -%}
+  <path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>
+  {%- elif name == 'download' -%}
+  <path d="M12 3v12m-4-4 4 4 4-4M4 19h16"/>
+  {%- elif name == 'check' -%}
+  <path d="m5 12 4 4L19 6"/>
+  {%- elif name == 'alert' -%}
+  <path d="M12 4 2.5 20h19L12 4Z"/><path d="M12 10v4m0 3h.01"/>
+  {%- else -%}
+  <circle cx="12" cy="12" r="8"/>
+  {%- endif -%}
+</svg>
+{%- endmacro %}
+
+{% macro status_badge(release) -%}
+  {%- if release.verified and release.published -%}
+    <span class="badge badge--live">Published</span>
+  {%- elif release.verified -%}
+    <span class="badge badge--ready">Verified</span>
+  {%- else -%}
+    <span class="badge badge--draft">Unverified</span>
+  {%- endif -%}
+{%- endmacro %}

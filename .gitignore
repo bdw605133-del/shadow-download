@@ -1,0 +1,25 @@
+# Local secrets and state
+.env
+data/*.db
+data/*.db-*
+data/secret_key
+storage/releases/*
+storage/staging/*
+dist/
+site/
+tools/installer_stub/*.obj
+tools/installer_stub/*.pdb
+!storage/releases/.gitkeep
+!storage/staging/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

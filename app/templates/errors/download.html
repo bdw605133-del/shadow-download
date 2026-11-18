@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="section">
+  <div class="container empty-state">
+    <div class="icon-wrap">{{ ui.icon('alert') }}</div>
+    <h1>Download unavailable</h1>
+    <p>{{ message }}</p>
+    <a class="btn btn--primary" href="{{ url_for('download') }}">Back to download page</a>
+  </div>
+</section>
+{% endblock %}

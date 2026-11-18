@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<section class="login-wrap">
+  <div class="card login-card">
+    <a class="brand" href="{{ url_for('home') }}">{{ ui.logo() }}<span class="brand-text"><strong>SHADOW</strong><small>DOWNLOAD</small></span></a>
+    <h1>Administrator sign in</h1>
+    <p class="muted">Release publishing and site content are restricted to authorised administrators.</p>
+    <form method="post" action="{{ url_for('admin.login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" autocomplete="username" required maxlength="64">
+      </div>
+      <div class="field section-cta">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="256">
+      </div>
+      <div class="form-actions"><button class="btn btn--primary btn--block" type="submit">Sign in</button></div>
+    </form>
+    <p class="muted section-cta"><a href="{{ url_for('home') }}">← Back to SHADOW DOWNLOAD</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+<aside class="admin-sidebar">
+  <h2>Administration</h2>
+  <nav>
+    <a href="{{ url_for('admin.dashboard') }}" {% if request.endpoint == 'admin.dashboard' %}class="active"{% endif %}>Dashboard</a>
+    <a href="{{ url_for('admin.new_release') }}" {% if request.endpoint == 'admin.new_release' %}class="active"{% endif %}>New release</a>
+    <a href="{{ url_for('admin.content') }}" {% if request.endpoint == 'admin.content' %}class="active"{% endif %}>Site content</a>
+    <a href="{{ url_for('admin.audit_log') }}" {% if request.endpoint == 'admin.audit_log' %}class="active"{% endif %}>Audit log</a>
+    <a href="{{ url_for('admin.change_password') }}" {% if request.endpoint == 'admin.change_password' %}class="active"{% endif %}>Password</a>
+  </nav>
+  <hr class="divider">
+  <form method="post" action="{{ url_for('admin.logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn btn--ghost btn--small btn--block" type="submit">Sign out</button>
+  </form>
+</aside>

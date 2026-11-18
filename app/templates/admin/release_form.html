@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as ui %}
+{% block content %}
+<div class="container admin-layout">
+  {% include 'admin/_sidebar.html' %}
+  <div>
+    <div class="admin-head">
+      <div>
+        <span class="eyebrow">{{ 'Edit release' if release else 'New release' }}</span>
+        <h1>{{ release.version if release else 'Publish a new version' }}</h1>
+        <p class="muted">Metadata is stored in the release database. The installer stays in dedicated release storage.</p>
+      </div>
+      {% if release %}{{ ui.status_badge(release) }}{% endif %}
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="card">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="form-section">
+        <h2>Release metadata</h2>
+        <div class="form-grid">
+          <div class="field"><label for="version">Version</label><input id="version" name="version" value="{{ data.version if data else '' }}" required pattern="[A-Za-z0-9][A-Za-z0-9._-]{0,63}" placeholder="1.0.1"><span class="hint">Letters, numbers, dots, dashes, underscores.</span></div>
+          <div class="field"><label for="release_date">Release date</label><input id="release_date" name="release_date" type="date" value="{{ data.release_date if data else '' }}" required></div>
+          <div class="field"><label for="title">Title</label><input id="title" name="title" value="{{ data.title if data else 'SHADOW MODEL release' }}" required maxlength="120"></div>
+          <div class="field"><label for="channel">Channel</label><select id="channel" name="channel"><option value="stable" {% if data and data.channel == 'stable' %}selected{% endif %}>Stable</option><option value="beta" {% if data and data.channel == 'beta' %}selected{% endif %}>Beta</option></select></div>
+          <div class="field"><label for="min_windows">Minimum Windows</label><input id="min_windows" name="min_windows" value="{{ data.min_windows if data else 'Windows 10 (64-bit)' }}" required></div>
+          <div class="field"><label for="max_windows">Maximum Windows (optional)</label><input id="max_windows" name="max_windows" value="{{ data.max_windows if data else '' }}"></div>
+          <div class="field"><label for="architecture">Architecture</label><select id="architecture" name="architecture"><option value="x64" {% if not data or data.architecture == 'x64' %}selected{% endif %}>x64</option><option value="x86" {% if data and data.architecture == 'x86' %}selected{% endif %}>x86</option><option value="arm64" {% if data and data.architecture == 'arm64' %}selected{% endif %}>arm64</option></select></div>
+        </div>
+        <div class="field section-cta"><label for="notes">Release notes</label><textarea id="notes" name="notes" required>{{ data.notes if data else '' }}</textarea><span class="hint">One change per line. Displayed publicly on the release notes and download pages.</span></div>
+        <div class="field section-cta"><label for="requirements">System requirements for this build</label><textarea id="requirements" name="requirements" class="small" required>{{ data.requirements if data else '' }}</textarea></div>
+      </div>
+
+      <div class="form-section">
+        <h2>Installer and build manifest</h2>
+        <div class="form-grid">
+          <div class="field"><label for="installer">{{ 'Replace installer (.exe / .msi)' if release else 'Installer file (.exe / .msi)' }}</label><input id="installer" name="installer" type="file" accept=".exe,.msi" {% if not release %}required{% endif %}><span class="hint">Stored outside the database under release storage. SHA-256 is generated on upload.</span></div>
+          <div class="field"><label for="manifest">Build manifest (manifest.json)</label><input id="manifest" name="manifest" type="file" accept=".json"><span class="hint">Produced by tools/package_release.py. Required for deep verification.</span></div>
+        </div>
+        {% if release and release.installer_name %}
+        <div class="checksum-box section-cta"><div><strong class="muted">Current installer</strong><br><code>{{ release.installer_name }} · {{ release.file_size|filesize }}</code><br><code>{{ release.sha256 }}</code></div></div>
+        {% endif %}
+      </div>
+
+      <div class="form-section">
+        <h2>Screenshots</h2>
+        <div class="field"><label for="screenshots">Upload screenshots (PNG, JPEG, WebP)</label><input id="screenshots" name="screenshots" type="file" accept="image/png,image/jpeg,image/webp" multiple></div>
+        <div class="field section-cta"><label for="screenshot_alt">Description for uploaded screenshots</label><input id="screenshot_alt" name="screenshot_alt" maxlength="200" placeholder="SHADOW MODEL chat interface"></div>
+        {% if screenshots %}
+        <div class="thumbs">
+          {% for shot in screenshots %}
+          <div class="thumb">
+            <img src="{{ url_for('screenshot', screenshot_id=shot.id) }}" alt="{{ shot.alt_text }}">
+            <form method="post" action="{{ url_for('admin.delete_screenshot', screenshot_id=shot.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button class="btn btn--small btn--danger" type="submit" data-confirm="Delete this screenshot?">Remove</button>
+            </form>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit">Save release</button>
+        <a class="btn btn--ghost" href="{{ url_for('admin.dashboard') }}">Cancel</a>
+      </div>
+    </form>
+
+    {% if release %}
+    <div class="card section-cta">
+      <h2>Verification &amp; publishing</h2>
+      <p class="muted">Run verification after saving. Publishing is blocked until the installer, checksum and required files are confirmed.</p>
+      <div class="admin-actions">
+        <form method="post" action="{{ url_for('admin.verify', release_id=release.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button class="btn btn--ghost" type="submit">Run verification</button>
+        </form>
+        {% if release.published %}
+        <form method="post" action="{{ url_for('admin.unpublish', release_id=release.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button class="btn btn--ghost" type="submit">Unpublish</button>
+        </form>
+        {% elif release.verified %}
+        <form method="post" action="{{ url_for('admin.publish', release_id=release.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button class="btn btn--primary" type="submit">Publish release</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card section-cta">
+      <h2>Danger zone</h2>
+      <p class="muted">Deleting removes the release metadata and its stored files. Type the version to confirm.</p>
+      <form method="post" action="{{ url_for('admin.delete', release_id=release.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="field"><label for="confirm">Confirm version</label><input id="confirm" name="confirm" required placeholder="{{ release.version }}"></div>
+        <div class="form-actions"><button class="btn btn--danger" type="submit">Delete release</button></div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
